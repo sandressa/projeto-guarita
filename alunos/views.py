@@ -4,5 +4,5 @@ from django.shortcuts import render
 
 def index(request):
     """pagina principal do guarita ifpi"""
-    return render(request, ' alunos/index.html')
+    return render(request, 'alunos/index.html')
 
