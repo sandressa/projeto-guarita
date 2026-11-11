@@ -1,0 +1,25 @@
+<!-- Título da página. -->
+<h2>Simulador de Leitura (Guarita)</h2>
+
+<!-- O formulário que envia os dados via POST. -->
+<form method="POST">
+    
+    <!-- Segurança do Django. -->
+    {% csrf_token %}
+    
+    <!-- Texto que aparece em cima da caixinha. -->
+    <label>Código do QR Code:</label><br>
+    
+    <!-- Caixa de texto onde o código será colado. 
+         O placeholder mostra uma dica cinzinha. 
+         required obriga a pessoa a preencher. -->
+    <input type="text" name="codigo_qr" required placeholder="Cole o código aqui"><br><br>
+    
+    <!-- O botão para clicar e enviar para o Django verificar. -->
+    <button type="submit">Verificar Acesso</button>
+</form>
+
+<br><br>
+
+<!-- Um link simples para voltar para a tela de gerar, caso precise. -->
+<a href="/gerar/">Voltar para Gerar QR Code</a>

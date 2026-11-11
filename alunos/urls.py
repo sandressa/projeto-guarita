@@ -1,24 +1,15 @@
-"""
-URL configuration for guarita_ifpi project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
+# Importa a ferramenta do Django que cria os caminhos (URLs) do site.
 from django.urls import path
+
+# Importa o arquivo views.py que está na mesma pasta para acessar as funções.
 from . import views
 
+# Cria a lista de rotas do sistema.
 urlpatterns = [
-    path('', views.index),
+    # Quando alguém acessar o link terminado em /gerar/, o Django vai chamar a função gerar_qr.
+    # O name='gerar_qr' é só um apelido para essa rota.
+    path('gerar/', views.gerar_qr, name='gerar_qr'),
+    
+    # Quando alguém acessar o link terminado em /validar/, o Django vai chamar a função validar_qr.
+    path('validar/', views.validar_qr, name='validar_qr'),
 ]
-
