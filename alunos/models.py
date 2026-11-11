@@ -10,3 +10,18 @@ class aluno(models.Model):
 
     def __str__(self):
         return super().__str__()
+        
+    user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='vigilante')
+    matricula = models.CharField(max_length=20,unique=True)
+    nome_completo =  models.CharField (max_length=100,verbose_name="nome_completo")
+def __str__(self):
+    return f"{self.nome}-{self.matricula}"
+class meta:
+    verbose_name = "aluno"
+    verbose_name_plural = " alunos"
+class registroAcesso(models.model):
+    TIPO__CHOICES = [
+        ('ENTRADA,entrada'),
+        ('SAIDA,saida'),
+    ]
+aluno = models.foreignkey(aluno, on_delete=models)    
