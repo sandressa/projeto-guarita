@@ -1,0 +1,45 @@
+<!-- Título que aparece grande na tela do navegador. -->
+<h2>Gerar QR Code do Aluno</h2>
+
+<!-- Cria o formulário. O method="POST" é o que envia os dados escondidos para o Django. -->
+<form method="POST">
+    
+    <!-- O csrf_token é uma segurança obrigatória do Django para evitar invasões. -->
+    {% csrf_token %}
+    
+    <!-- Escreve o texto "Matrícula do Aluno:" na tela. -->
+    <label>Matrícula do Aluno:</label><br>
+    
+    <!-- Cria a caixinha de digitar. 
+         name="matricula" é o nome que o Django usa para achar o dado. 
+         required significa que é OBRIGATÓRIO preencher. 
+         maxlength="20" limita o tamanho para 20 caracteres. -->
+    <input type="text" name="matricula" required maxlength="20"><br><br>
+    
+    <!-- O botão que a pessoa clica para enviar os dados para o Django. -->
+    <button type="submit">Gerar Código</button>
+</form>
+
+<!-- AQUI COMEÇA A MÁGICA: Isso só aparece SE a imagem tiver sido gerada. -->
+{% if imagem_qr %}
+    <!-- Uma linha horizontal para separar. -->
+    <hr>
+    
+    <!-- Título de sucesso. -->
+    <h3>QR Code Gerado com Sucesso!</h3>
+    
+    <!-- MOSTRA O CÓDIGO EM TEXTO (Para você poder selecionar e copiar). -->
+    <p style="font-size: 18px; background-color: #f0f0f0; padding: 10px; display: inline-block;">
+        Código: <strong>{{ codigo_gerado }}</strong>
+    </p>
+    
+    <br><br>
+    
+    <!-- MOSTRA A IMAGEM DO QR CODE (O "data:image..." avisa que é uma imagem). -->
+    <img src="data:image/png;base64,{{ imagem_qr }}" alt="QR Code do Aluno"><br><br>
+    
+    <!-- BOTÃO VERDE QUE LEVA PARA A TELA DE VALIDAR. -->
+    <a href="/validar/" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+        Ir para a Guarita (Verificar)
+    </a>
+{% endif %}
