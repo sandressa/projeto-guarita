@@ -1,2 +1,3 @@
 Django
 Pillow
+qrcode==8.2
