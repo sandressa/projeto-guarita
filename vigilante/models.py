@@ -1,8 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
-class vigilante(models.Model):
-    user = models.OneToOneField('auth.User',on_delete=models.CASCADE)
-    matricula = models.CharField(max_length=20,unique=True)
-    nome_completo = models.CharField(max_length=100,verbose_name="nome_completo")
-
+class Vigilante(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='vigilante')
+    matricula = models.CharField(max_length=20, unique=True)
+    nome_completo = models.CharField(max_length=100, verbose_name="nome_completo")

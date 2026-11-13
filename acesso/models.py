@@ -12,4 +12,4 @@ class RegistroAcesso(models.Model):
     data_hora = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.aluno.nome} - {self.tipo}"
+            return f"{self.aluno.nome} - {self.tipo}"
