@@ -1,0 +1,106 @@
+/* Configuração geral da página */
+body {
+    background-color: #f2f4f8;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #102b4e;
+}
+
+/* Título */
+h2 {
+    background-color: #102b4e;
+    color: #ffcc33;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    margin: 0 0 30px 0;
+}
+
+/* Formulário */
+form {
+    background-color: white;
+    padding: 30px;
+    width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    border-top: 5px solid #ffcc33;
+}
+
+/* Texto do formulário */
+label {
+    font-weight: bold;
+    color: #102b4e;
+}
+
+/* Campo de digitação */
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+input:focus {
+    border-color: #ffcc33;
+}
+
+/* Botão */
+button {
+    background-color: #102b4e;
+    color: #ffcc33;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1c4778;
+}
+
+/* Resultado do QR Code */
+h3 {
+    color: #102b4e;
+    text-align: center;
+}
+
+p {
+    border-radius: 6px;
+    color: #102b4e;
+}
+
+img {
+    max-width: 200px;
+    height: auto;
+}
+
+/* Link para validar */
+a {
+    background-color: #ffcc33;
+    color: #102b4e;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+a:hover {
+    background-color: #e6b422;
+}
+
+hr {
+    width: 80%;
+    border: 1px solid #ffcc33;
+    margin: 25px 0;
+}
