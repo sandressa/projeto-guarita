@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=devices-width, initial-scale=1.0">
+    <title>Históricos de Acessos</title>
+    <link rel="stylesheet" href="{% static 'css/historico_acesso.css' %}">
+</head>
+<body>
+    <h1>Históricos de Acessos</h1>
+    
+    <form method="GET" action="{% url'historico_acesso' %}">
+        <label for="matricula">Pesquisar pessoa:</label>
+        <input
+            type="text"
+            name="matricula"
+            id="matricula"
+            placeholder="Digite a matricula..."
+            value="{{ matricula }}"
+        >
+
+        <button type="submit">Pesquisar</button>
+    </form>
+
+</body>
+</html>
