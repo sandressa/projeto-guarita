@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .forms import RegistroAcessoForm
+from .forms import HistoricoAcessoForm
 
 def registrar_acesso(request):
     mensagem = None
@@ -22,3 +23,4 @@ def registrar_acesso(request):
         'form': form,
         'mensagem': mensagem
     })
+
