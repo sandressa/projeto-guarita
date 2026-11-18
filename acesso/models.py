@@ -10,6 +10,6 @@ class RegistroAcesso(models.Model):
     aluno = models.ForeignKey(alunos_models.Aluno, on_delete=models.CASCADE)
     tipo = models.CharField(max_length=10, choices=TIPO_CHOICES)
     data_hora = models.DateTimeField(auto_now_add=True)
-    
+    data_atualização = models.DateTimeField("ultima atualização", auto_now=True)
     def __str__(self):
             return f"{self.aluno.nome} - {self.tipo}"

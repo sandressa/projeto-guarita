@@ -7,6 +7,7 @@ class Aluno(models.Model):
     qrcode_token = models.CharField("token do qr code", max_length=100, unique=True)
     foto = models.ImageField("imagem do aluno", upload_to="fotos/aluno", blank=True, null=True)
     ativo = models.BooleanField("ativo", default=True)
+    data_cadastro = models.DateTimeField('data de cadastro',auto_now_add= True)
 
     def __str__(self):
         return f"{self.nome} - {self.matricula}"
