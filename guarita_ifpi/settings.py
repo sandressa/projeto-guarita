@@ -128,3 +128,13 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME' : 'guarita_db',
+        'USER': 'root',
+        'PASSAWORD': '2008',
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
+    }
+}
