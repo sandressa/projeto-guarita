@@ -13,3 +13,4 @@ class RegistroAcesso(models.Model):
     data_atualização = models.DateTimeField("ultima atualização", auto_now=True)
     def __str__(self):
             return f"{self.aluno.nome} - {self.tipo}"
+
