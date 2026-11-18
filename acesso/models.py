@@ -13,3 +13,4 @@ class RegistroAcesso(models.Model):
     
     def __str__(self):
             return f"{self.aluno.nome} - {self.tipo}"
+
