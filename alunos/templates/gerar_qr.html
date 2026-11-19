@@ -1,55 +1,49 @@
+<!-- Carrega a biblioteca de arquivos estáticos do Django (CSS, imagens, JS) -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Define o padrão de acentuação e adaptação para celular/computador -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerar QR Code</title>
+    <!-- Conecta o arquivo de estilo CSS da página -->
     <link rel="stylesheet" href="{% static 'css/gerar_qr.css'%}">
 </head>
 <body>
 
-<!-- Título que aparece grande na tela do navegador. -->
+<!-- Título principal que aparece no topo da página -->
 <h2>Gerar QR Code do Aluno</h2>
 
-<!-- Cria o formulário. O method="POST" é o que envia os dados escondidos para o Django. -->
+<!-- Formulário que envia a matrícula digitada via método POST para o Django -->
 <form method="POST">
-    
-    <!-- O csrf_token é uma segurança obrigatória do Django para evitar invasões. -->
+    <!-- Token de segurança obrigatório do Django contra ataques CSRF -->
     {% csrf_token %}
     
-    <!-- Escreve o texto "Matrícula do Aluno:" na tela. -->
+    <!-- Rótulo e campo de texto onde o usuário digita o número da matrícula -->
     <label>Matrícula do Aluno:</label><br>
-    
-    <!-- Cria a caixinha de digitar. 
-         name="matricula" é o nome que o Django usa para achar o dado. 
-         required significa que é OBRIGATÓRIO preencher. 
-         maxlength="20" limita o tamanho para 20 caracteres. -->
     <input type="text" name="matricula" required maxlength="20"><br><br>
     
-    <!-- O botão que a pessoa clica para enviar os dados para o Django. -->
+    <!-- Botão que dispara o envio do formulário para gerar o QR Code -->
     <button type="submit">Gerar Código</button>
 </form>
 
-<!-- AQUI COMEÇA A MÁGICA: Isso só aparece SE a imagem tiver sido gerada. -->
+<!-- Bloco condicional: só aparece na tela depois que um QR Code for gerado -->
 {% if imagem_qr %}
-    <!-- Uma linha horizontal para separar. -->
+    <!-- Linha horizontal para separar o formulário do resultado -->
     <hr>
-    
-    <!-- Título de sucesso. -->
     <h3>QR Code Gerado com Sucesso!</h3>
     
-    <!-- MOSTRA O CÓDIGO EM TEXTO (Para você poder selecionar e copiar). -->
+    <!-- Exibe o código em texto dentro de uma caixa cinza para facilitar a cópia -->
     <p style="font-size: 18px; background-color: #f0f0f0; padding: 10px; display: inline-block;">
         Código: <strong>{{ codigo_gerado }}</strong>
     </p>
-    
     <br><br>
     
-    <!-- MOSTRA A IMAGEM DO QR CODE (O "data:image..." avisa que é uma imagem). -->
+    <!-- Renderiza a imagem PNG do QR Code convertida em texto Base64 -->
     <img src="data:image/png;base64,{{ imagem_qr }}" alt="QR Code do Aluno"><br><br>
     
-    <!-- BOTÃO VERDE QUE LEVA PARA A TELA DE VALIDAR. -->
+    <!-- Link estilizado como botão verde para levar direto à tela de validação da guarita -->
     <a href="/validar/" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
         Ir para a Guarita (Verificar)
     </a>
