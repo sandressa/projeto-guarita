@@ -2,3 +2,7 @@ __pycache__/
 *.py[cod]
 ll_env/
 .env
+__pycache__/
+*.pyc
+db.sqlite3
+
