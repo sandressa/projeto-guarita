@@ -1,18 +1,12 @@
-# Importa a ferramenta do Django que cria os caminhos (URLs) do site.
 from django.urls import path
-from django.shortcuts import redirect
-
-# Importa o arquivo views.py que está na mesma pasta para acessar as funções.
 from . import views
 
-
-# Cria a lista de rotas do sistema.
+# Define os caminhos das páginas do sistema
 urlpatterns = [
-    path('', lambda request: redirect('gerar_qr'), name='inicio'),
-    # Quando alguém acessar o link terminado em /gerar/, o Django vai chamar a função gerar_qr.
-    # O name='gerar_qr' é só um apelido para essa rota.
+
+    # Página responsável por gerar o QR Code do aluno
     path('gerar/', views.gerar_qr, name='gerar_qr'),
-    
-    # Quando alguém acessar o link terminado em /validar/, o Django vai chamar a função validar_qr.
+
+    # Página responsável por validar o QR Code na guarita
     path('validar/', views.validar_qr, name='validar_qr'),
 ]

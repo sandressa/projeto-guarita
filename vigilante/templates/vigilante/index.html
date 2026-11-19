@@ -1,0 +1,279 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <!-- Configurações da página -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Painel do Vigilante | Guarita IFPI</title>
+
+    <!-- Conexão com o arquivo CSS -->
+    <link rel="stylesheet" href="{% static 'css/vigilante.css' %}">
+
+</head>
+
+<body>
+
+    <!-- MENU LATERAL -->
+    <aside class="menu-lateral">
+
+        <div class="logo">
+            <h1>GUARITA <span>IFPI</span></h1>
+            <p>Painel do Vigilante</p>
+        </div>
+
+        <nav>
+
+            <a href="#" class="ativo">⌂ Início</a>
+
+            <a href="#">♟ Alunos</a>
+
+            <a href="#">▤ Relatórios</a>
+
+            <a href="#">⚙ Configurações</a>
+
+        </nav>
+
+        <div class="mensagem-menu">
+            <p>Juntos por uma escola mais segura!</p>
+        </div>
+
+    </aside>
+
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="conteudo">
+
+        <!-- CABEÇALHO -->
+        <header class="cabecalho">
+
+            <div class="titulo">
+                <h2>Painel do Vigilante</h2>
+                <p>Segurança e controle de acesso dos alunos.</p>
+            </div>
+
+            <div class="data-hora">
+
+                <p id="dataAtual"></p>
+
+                <strong id="horaAtual"></strong>
+
+            </div>
+
+            <div class="perfil">
+
+                <span>Vigilante</span>
+
+                <strong>{{ vigilante.nome|default:"Vigilante" }}</strong>
+
+                <p>● Online</p>
+
+            </div>
+
+        </header>
+
+
+        <!-- INDICADORES -->
+        <section class="indicadores">
+
+            <!-- Total de alunos -->
+            <div class="cartao">
+
+                <h3>Total de alunos</h3>
+
+                <strong>{{ total_alunos|default:0 }}</strong>
+
+                <p>Alunos cadastrados</p>
+
+            </div>
+
+
+            <!-- Entradas -->
+            <div class="cartao">
+
+                <h3>Entradas hoje</h3>
+
+                <strong>{{ total_entradas|default:0 }}</strong>
+
+                <p>Alunos que entraram</p>
+
+            </div>
+
+
+            <!-- Saídas -->
+            <div class="cartao">
+
+                <h3>Saídas hoje</h3>
+
+                <strong>{{ total_saidas|default:0 }}</strong>
+
+                <p>Alunos que saíram</p>
+
+            </div>
+
+
+            <!-- Acessos negados -->
+            <div class="cartao">
+
+                <h3>Acessos negados</h3>
+
+                <strong>{{ total_negados|default:0 }}</strong>
+
+                <p>Tentativas não autorizadas</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- PESQUISA DE ALUNOS -->
+        <section class="pesquisa">
+
+            <h2>Consultar aluno</h2>
+
+            <form method="GET" action="">
+
+                <input
+                    type="text"
+                    name="busca"
+                    placeholder="Buscar aluno por nome ou matrícula..."
+                >
+
+                <button type="submit">Pesquisar</button>
+
+            </form>
+
+        </section>
+
+
+        <!-- INFORMAÇÕES DO ALUNO -->
+        <section class="informacoes-aluno">
+
+            <h2>Informações do aluno</h2>
+
+            <div class="dados-aluno">
+
+                <div class="foto-aluno">
+
+                    <img
+                        src="{% static 'img/aluno-padrao.png' %}"
+                        alt="Foto do aluno"
+                    >
+
+                </div>
+
+                <div class="dados">
+
+                    <h3>
+                        {{ aluno.nome|default:"Nome do aluno" }}
+                    </h3>
+
+                    <p>
+                        Matrícula:
+                        {{ aluno.matricula|default:"Não informado" }}
+                    </p>
+
+                    <p>
+                        Turma:
+                        {{ aluno.turma|default:"Não informada" }}
+                    </p>
+
+                    <p>
+                        Situação:
+                        <span class="status-aluno">
+                            {{ aluno.status|default:"Não consultado" }}
+                        </span>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RESUMO DO DIA -->
+        <section class="resumo-dia">
+
+            <h2>Movimentação de hoje</h2>
+
+            <div class="resumo-item">
+
+                <span>🟢 Entradas</span>
+
+                <strong>{{ total_entradas|default:0 }}</strong>
+
+            </div>
+
+            <div class="resumo-item">
+
+                <span>🟡 Saídas</span>
+
+                <strong>{{ total_saidas|default:0 }}</strong>
+
+            </div>
+
+            <div class="resumo-item">
+
+                <span>🔴 Acessos negados</span>
+
+                <strong>{{ total_negados|default:0 }}</strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- AVISO DE SEGURANÇA -->
+        <section class="aviso">
+
+            <h2>Fique atento!</h2>
+
+            <p>
+                Qualquer tentativa de acesso não autorizado
+                deve ser comunicada imediatamente à coordenação.
+            </p>
+
+        </section>
+
+
+        <!-- RODAPÉ -->
+        <footer>
+
+            <p>Guarita IFPI © 2026</p>
+
+            <span>Sistema de Controle de Acesso</span>
+
+        </footer>
+
+    </main>
+
+
+    <!-- SCRIPT PARA DATA E HORÁRIO -->
+    <script>
+
+        function atualizarHorario() {
+
+            const agora = new Date();
+
+            document.getElementById("dataAtual").textContent =
+                agora.toLocaleDateString("pt-BR");
+
+            document.getElementById("horaAtual").textContent =
+                agora.toLocaleTimeString("pt-BR");
+
+        }
+
+        atualizarHorario();
+
+        setInterval(atualizarHorario, 1000);
+
+    </script>
+
+</body>
+
+</html>

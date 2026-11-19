@@ -1,71 +1,121 @@
-# Importa a função que desenha as páginas HTML.
 from django.shortcuts import render
-
-# Importa a função que devolve respostas simples (as telas verde e vermelha).
 from django.http import HttpResponse
-
-# Importa a biblioteca que cria códigos aleatórios (para o token do QR).
 import uuid
-
-# Importa a biblioteca que desenha a imagem do QR Code.
 import qrcode
-
-# Importa ferramentas para guardar a imagem na memória temporariamente.
 from io import BytesIO
 import base64
 
+# Importa as tabelas criadas no arquivo models.py
+from .models import Aluno, RegistroAcesso
+
 def gerar_qr(request):
-    # Verifica se a pessoa clicou no botão "Gerar Código" (envio de dados via POST).
+
+    # Verifica se o formulário foi enviado
     if request.method == 'POST':
-        
-        # Pega o que foi digitado no campo 'matricula' do formulário HTML.
+
+        # Pega a matrícula digitada pelo usuário
         matricula = request.POST.get('matricula')
-        
-        # Junta a palavra "ALUNO", a matrícula e 4 letras aleatórias para criar um código único.
-        codigo_gerado = f"ALUNO-{matricula}-{uuid.uuid4().hex[:4].upper()}"
-        
-        # MOSTRA NO TERMINAL PRETO (É o Print 5 que o professor pediu!).
-        print(f"✅ SISTEMA GEROU: {codigo_gerado}")
-        
-        # Manda o Python desenhar a imagem do QR Code com base no texto gerado.
-        qr = qrcode.make(codigo_gerado)
-        
-        # Cria um espaço vazio na memória do computador para segurar a imagem.
-        buffer = BytesIO()
-        
-        # Salva a imagem dentro desse espaço no formato PNG.
-        qr.save(buffer, format="PNG")
-        
-        # Converte a imagem para texto (base64) para que o HTML consiga mostrar ela na tela.
-        img_str = base64.b64encode(buffer.getvalue()).decode()
-        
-        # Envia a imagem e o texto do código para a tela (gerar_qr.html).
-        return render(request, 'gerar_qr.html', {'imagem_qr': img_str, 'codigo_gerado': codigo_gerado})
-        
-    # Se a pessoa só abriu a página (sem clicar no botão), mostra o formulário vazio.
+
+        try:
+            # Procura o aluno no banco de dados pela matrícula
+            aluno = Aluno.objects.get(matricula=matricula)
+
+            # Verifica se o aluno já possui um QR Code
+            if not aluno.qrcode_token:
+
+                # Gera um código único para o aluno
+                codigo_gerado = f"ALUNO-{matricula}-{uuid.uuid4().hex[:4].upper()}"
+
+                # Salva o código na ficha do aluno
+                aluno.qrcode_token = codigo_gerado
+                aluno.save()
+
+            else:
+                # Reutiliza o código que o aluno já possui
+                codigo_gerado = aluno.qrcode_token
+
+            # Gera a imagem do QR Code
+            qr = qrcode.make(codigo_gerado)
+
+            # Armazena a imagem temporariamente
+            buffer = BytesIO()
+            qr.save(buffer, format="PNG")
+
+            # Converte a imagem para texto
+            img_str = base64.b64encode(buffer.getvalue()).decode()
+
+            # Envia o QR Code e o código para a página
+            return render(request, 'gerar_qr.html', {
+                'imagem_qr': img_str,
+                'codigo_gerado': codigo_gerado
+            })
+
+        except Aluno.DoesNotExist:
+
+            # Exibe uma mensagem se a matrícula não for encontrada
+            return render(request, 'gerar_qr.html', {
+                'erro': 'Matrícula não cadastrada no banco!'
+            })
+
+    # Exibe a página normalmente ao ser aberta
     return render(request, 'gerar_qr.html')
 
 def validar_qr(request):
-    # Verifica se a pessoa clicou no botão "Verificar Acesso".
+
+    # Verifica se o formulário foi enviado
     if request.method == 'POST':
-        
-        # Pega o que foi digitado (ou colado) no campo 'codigo_qr' do formulário HTML.
+
+        # Pega o código QR informado
         codigo_lido = request.POST.get('codigo_qr')
-        
-        # MOSTRA NO TERMINAL PRETO (Simulando o celular mandando o dado).
-        print(f"✅ SISTEMA RECEBEU A LEITURA: {codigo_lido}")
-        
-        # Verifica se o código lido começa com a palavra "ALUNO".
-        if codigo_lido.startswith("ALUNO"):
-            
-            # Se começar, devolve uma tela com a mensagem verde de liberado.
-            return HttpResponse("<h2 style='color: green;'>✅ ACESSO LIBERADO!</h2>")
-            
-        # Se não começar com "ALUNO", significa que é um código inválido.
-        else:
-            
-            # Devolve uma tela com a mensagem vermelha de negado.
-            return HttpResponse("<h2 style='color: red;'>❌ ACESSO NEGADO!</h2>")
-            
-    # Se a pessoa só abriu a página (sem clicar no botão), mostra o formulário vazio.
+
+        # Remove espaços e transforma as letras em maiúsculas
+        if codigo_lido:
+            codigo_lido = codigo_lido.strip().upper()
+
+        try:
+            # Procura o aluno pelo código do QR Code
+            aluno_encontrado = Aluno.objects.get(qrcode_token=codigo_lido)
+
+            # Verifica se o aluno está ativo no sistema
+            if not aluno_encontrado.ativo:
+                return HttpResponse(
+                    "<div style='text-align:center; padding:50px;'>"
+                    "<h2 style='color:red;'>❌ ACESSO NEGADO</h2>"
+                    "<p>Aluno inativo no sistema.</p></div>"
+                )
+
+            # Busca o último registro de acesso do aluno
+            ultimo_registro = RegistroAcesso.objects.filter(
+                aluno=aluno_encontrado
+            ).order_by('-data_hora').first()
+
+            # Verifica se o próximo acesso será entrada ou saída
+            if ultimo_registro and ultimo_registro.tipo == 'ENTRADA':
+                tipo = 'SAIDA'
+            else:
+                tipo = 'ENTRADA'
+
+            # Salva o acesso no histórico
+            RegistroAcesso.objects.create(
+                aluno=aluno_encontrado,
+                tipo=tipo
+            )
+
+            # Exibe a mensagem de acesso liberado
+            return HttpResponse(
+                f"<div style='text-align:center; padding:50px;'>"
+                f"<h2 style='color:green;'>✅ ACESSO LIBERADO</h2>"
+                f"<p>Registro de {tipo} salvo!</p></div>"
+            )
+
+        except Aluno.DoesNotExist:
+
+            # Exibe uma mensagem se o código não for encontrado
+            return HttpResponse(
+                f"<div style='text-align:center; padding:50px;'>"
+                f"<h2 style='color:red;'>❌ ACESSO NEGADO</h2>"
+                f"<p>O código '{codigo_lido}' não existe.</p></div>"
+            )
+
+    # Abre a página de validação normalmente
     return render(request, 'validar_qr.html')
